@@ -3,8 +3,10 @@ $(document).ready(function() {
 
 	$( window ).scroll(function() 
 	{
+		changeMenu();
 		setTimeout(showInAnimation,400);
 	});
+	changeMenu();
 	showInAnimation();
 
 	$( 'body' ).on( 'click', 'button.dead', function(){ return false; } );
@@ -18,107 +20,20 @@ $(document).ready(function() {
 	$('.segredo').remove();
 		
 
-	urlToOpenForm();
-
-	$('.navbar a.contato').bind( 'click', function(e){
-		getBeforeForm();
-		e.preventDefault;
-		$('#contato').show();
-		$('body').css('overflow', 'hidden');
-		return false;
-	} );
-
-	$('.navbar a.reservas').bind( 'click', function(e){
-		getBeforeForm();
-		e.preventDefault;
-		$('#reservas').show();
-		$('body').css('overflow', 'hidden');
-		return false;
-	} );
-
-	$('.fechar-modal-form').bind( 'click', function(e){
-		$(this).closest('form').find('alert').hide();
-		$(this).closest('section').hide();
-		$('body').css('overflow', 'auto');
-		// $(this).closest('form')[0].reset();
-		var curUrl = window.location.href.slice(0, window.location.href.slice(0, -1).lastIndexOf('/'));
-		history.pushState({}, '', curUrl + '/' + beforeForm + '/');
-		return false;
-	} );
-
-	// $('.aton-form').bind( 'click', function(e){
-	// 	return false;
-	// } );
-
-
-	$( '#telefone-reserva, #telefone-contato' ).mask('(00) 0000 0000', {placeholder: "(__) ____ ____"});
-	$( '#entrada-reserva, #home.chamada #entrada-reserva' ).mask('00/00/0000', {placeholder: "__/__/____"});
-	$( '#saida-reserva, #home.chamada #saida-reserva' ).mask('00/00/0000', {placeholder: "__/__/____"});
+	// $( '#saida-reserva, #home.chamada #saida-reserva' ).mask('00/00/0000', {placeholder: "__/__/____"});
 
 
 
-
-	//LINKS COM MODAL
-
-	$( '#navbar .nav .reservas, #navbar .nav .contato' ).bind('click', function(){
-		history.pushState({}, '', $(this).attr("href") + '/');
-		return false;
-	})
-
-	$(window).on("popstate", function(e) {
-		urlToOpenForm();
-	});
 
 
 	/////////////////
 
 
-
-
-
-	//VERIFICAR TARIVAS
-
-	$('.quartos-tarifas .wrap-verificar .verificar').bind('click', function()
-	{
-		var mTop = '-' + $( '.quartos-tarifas .wrap-verificar' ).height();
-		$( this ).css('margin-top', mTop + 'px');
-		mTop = undefined;
-
-	})
-
-	$('.quartos-tarifas .wrap-verificar .quartos-quantidade .seta-up').bind('click', function()
-	{
-		var qtdMaxQuartos = parseInt( $( this ).closest( '.quartos-disponiveis' ).find( 'p strong').text() );
-		var qtdQuartos = parseInt( $( this ).closest( '.quartos-quantidade' ).find( 'span').text() );
-
-		qtdQuartos = Math.min(qtdQuartos+1, qtdMaxQuartos);
-		$( this ).closest( '.quartos-quantidade' ).find( 'span').text( '0' + qtdQuartos );
-
-		qtdQuartos = undefined;
-	})
-
-	$('.quartos-tarifas .wrap-verificar .quartos-quantidade .seta-down').bind('click', function()
-	{
-		var qtdQuartos = parseInt( $( this ).closest( '.quartos-quantidade' ).find( 'span').text() );
-
-		qtdQuartos = Math.max(qtdQuartos-1, 1);
-		$( this ).closest( '.quartos-quantidade' ).find( 'span').text( '0' + qtdQuartos );
-
-		qtdQuartos = undefined;
-	})
-
-	///////////////////
-
-
-
-
-	// deixa o bg do título do mesmo tamanho que as vantagens
-	hotelSobreTituloSameHeight();
+/*
 	$( window ).resize(function(e) 
 	{
-		hotelSobreTituloSameHeight();
 	});
-
+*/
 
 	$('.aton-form').submit(function(){return false}); 
 	$('section#contato form input[type="submit"]').bind('click', 
@@ -171,450 +86,290 @@ $(document).ready(function() {
 		}
 	)
 
-	$('section#reservas form input[type="submit"]').bind('click', 
-		function()
-		{
-			//parte feita com aspas duplas pra encaixar melhor no script PHP
-
-			//var tst = "<table width='100%' style='margin: 10px 0; color: #333'> <tr> <td style='background: #ccc; width: 100%; height: 50px; font-size: 18px; text-transform: uppercase; padding: 5px;'> <p> <b>";
-			var tst = '';
-
-			$( this ).closest( 'form' ).find( '#quartos .quarto:not(".template"):not("disabled")' ).each( function()
-			{
-				tst += '<b>01 Apartamento ' + $( this ).find( 'select' ).val() + '</b> ';
-
-				//tst += "</b><br> <span style='font-size: 12px; font-style: italic; text-transform: none;'>";
-
-				lCama = $( this ).find( 'input[type=checkbox]:checked' ).length > 0;
-				lCrianca = false;
-				$( this ).find( '.hospede.crianca:not(".template") input').each( function()
-				{
-					if( $( this ).val() != "" )
-					{
-						lCrianca = true;
-					}
-				});
-
-				if( lCama && !lCrianca )
-				{
-					tst += "(com Cama Extra) ";
-				}
-				else if( !lCama && lCrianca )
-				{
-					tst += "(com Criança menor de 07 anos)";
-				}
-				else if( lCama && lCrianca )
-				{
-					tst += "(com Cama Extra e Criança menor de 07 anos)";
-				}
-
-
-				//tst += "</span> </p> </td> </tr> <tr> <td style='background: #e7e7e7; width: 100%; height: 50px; padding: 10px 5px 20px;'> <p style='line-height: 26px;'>";
-				tst += '<br><br>';
-
-				$( this ).find( '#hospedes .hospede:not(".template")' ).each( function()
-				{
-					if( $( this ).find( 'input' ).val() != '')
-					{
-
-						if( $( this ).hasClass( 'crianca' ) && $( this ).find( 'input' ).val() != '')
-						{
-							tst += "<b>Criança:</b> ";
-						}
-						
-						if( $( this ).hasClass( 'extra' ) )
-						{
-							tst += "<b>Cama Extra:</b> ";
-						}
-						
-						if( $( this ).not('.crianca').not('.extra').length > 0 )
-						{
-							tst += "<b>Hóspede:</b> ";
-						}
-
-						tst += $( this ).find( 'input' ).val() + '<br>';
-
-					}
-				})
-
-				//tst += '</p> </td> </tr> </table>';
-				tst += "<br><br><br>";
-			})
-
-			$( '#reservas form #quartos-extenso-reserva' ).val( tst );
-
-			tst = undefined;
-
-			$(this).closest('form').validate({
-				submitHandler: function(form)
-				{
-					$(form).find('#success').hide();
-					$(form).find('#error').hide();
-					$(form).find('fieldset').hide();
-					$(form).find('.form-text').hide();
-					$(form).find('input[type=submit]').hide();
-
-					$(form).find('#process').show();
-
-					$(form).find( '#hospedes .hospede input' ).each( function()
-					{
-						console.log($(this));
-					});
-
-					$(form).ajaxSubmit({
-						type: 'post',
-						success: reservaOk
-					});
-				}, 
-				rules: {
-					'nm-reserva': {
-						required: true
-					},
-					'ml-reserva': {
-						email: true,
-						required: true
-					},
-					'tlfn-reserva': {
-						required: true
-					},
-					'cdd-reserva': {
-						required: true
-					},
-					'ntrd-reserva': {
-						required: true
-					},
-					'sd-reserva': {
-						required: true
-					},
-					'pgmnt-reserva': {
-						required: true
-					}
-				},
-				messages: {
-					'nm-reserva': {
-						required: 'Campo obrigatório'
-					},
-					'ml-reserva': {
-						email: 'E-mail inválido',
-						required: 'Campo obrigatório'
-					},
-					'tlfn-reserva': {
-						required: 'Campo obrigatório'
-					},
-					'cdd-reserva': {
-						required: 'Campos obrigatórios'
-					},
-					'ntrd-reserva': {
-						required: 'Campo obrigatório'
-					},
-					'sd-reserva': {
-						required: 'Campo obrigatório'
-					},
-					'pgmnt-reserva': {
-						required: 'Campo obrigatório'
-					}
-				}
-			});
-		}
-	)
-
-	$('#home.chamada form input[type="submit"]').bind('click', 
-		function()
-		{
-			$( '#reservas form #nome-reserva' ).val( $( this ).closest( 'form' ).find( '#nome-reserva' ).val() )
-			$( '#reservas form #telefone-reserva' ).val( $( this ).closest( 'form' ).find( '#telefone-reserva' ).val() )
-			$( '#reservas form #email-reserva' ).val( $( this ).closest( 'form' ).find( '#email-reserva' ).val() )
-			$( '#reservas form #saida-reserva' ).val( $( this ).closest( 'form' ).find( '#saida-reserva' ).val() )
-			$( '#reservas form #entrada-reserva' ).val( $( this ).closest( 'form' ).find( '#entrada-reserva' ).val() )
-			$( this ).closest( 'form' )[0].reset();
-			
-			$('.navbar a.reservas').click();
-		}
-	);
-
 	$('.alert button').bind('click', function()
 	{
 		$(this).closest('.alert').hide();
 	})
 
-	$( '#novidades #bg-novidade.rodape input[type="checkbox"]' ).bind( 'click', function()
+
+
+	$('nav #menu-mobile').bind('click', function ()
 	{
-		$(this).closest('label').find('span').attr('checked', this.checked);
+		if( $(this).closest('nav.menu-aberto').length > 0 )
+		{
+			$(this).closest('nav.menu-aberto').removeClass('menu-aberto');
+		}
+		else
+		{
+			$(this).closest('nav').addClass('menu-aberto');
+		}
+
+	})
+
+
+
+
+	//-------------------PLAYER-------------------//
+
+	/////////////////////////////////////////////////
+	// Hard work by Scott Andrew (scottandrew.com) //
+	/////////////////////////////////////////////////
+
+	// the playlist is just a JSON-style object.
+
+
+    $('#player #musica #nome-faixa').text(playlist[aud.pos].title);
+    $('#player #musica #nome-album').text( 'Álbum: ' + playlist[aud.pos].album);
+
+	$('body').on('click', '#player .play, .player-trigger.pausado', function (evt) {
+		playMusic(evt)
 	});
 
-	$('body').on('click', '#reservas form #quartos li input[type=checkbox]', function(){
-		$(this).closest('label').find('span').attr('checked', this.checked);
-
-		if( this.checked )
-		{
-			var nQuarto = $( this ).closest('.quarto').find('#id-quarto').val();
-			var eQuarto = $( this ).closest( '.quarto' );
-
-			eQuarto.find( '.hospede.extra.template' ).clone().insertBefore( eQuarto.find( '#hospedes #cf-hospede') );
-			eQuarto.find( '.hospede.extra.template' ).last().removeClass('template').addClass( 'hospede-extra-quarto-' + nQuarto);
-
-			eQuarto.find( '.hospede-extra-quarto-' + nQuarto + ' #extra-quarto').attr({
-				'name': 'hospede-extra-quarto-' + nQuarto,
-				'id': 'hospede-extra-quarto-' + nQuarto
-			});
-
-			eQuarto.find( '#hospede-extra-quarto-' + nQuarto ).closest( 'label' ).attr({
-				'for': 'hospede-extra-quarto-' + nQuarto
-			});
-
-		}
-		else
-		{
-			$( this ).closest( '.quarto' ).find( '#hospedes .hospede.extra' ).last().remove();			
-		}
-
-		contabilizaQuartos();
-	})
-
-	$('body').on('click', '#reservas form #quartos li #num .seta-up', function()
-	{
-		var qtd = parseInt( $( this ).closest( '#num' ).find( 'span' ).text() );
-		qtd = Math.min( qtd + 1, 4 );
-
-		$( this ).closest( '#num' ).find( 'span' ).text( '0' + qtd );
-		$( this ).closest( '#num' ).find( 'input' ).val( qtd );
-
-		contabilizaQuartos();
-	})
-
-	$('body').on('click', '#reservas form #quartos li #num .seta-down', function()
-	{
-		var qtd = parseInt( $( this ).closest( '#num' ).find( 'span' ).text() );
-		qtd = Math.max( qtd - 1, 1 );
-
-		$( this ).closest( '#num' ).find( 'span' ).text( '0' + qtd );
-		$( this ).closest( '#num' ).find( 'input' ).val( qtd );
-
-		contabilizaQuartos();
-	})
-
-	$('body').on( 'change', '#reservas form #quartos li select', function() {
-		if( $( this ).val() != "" )
-		{
-			$( this ).closest( 'li' ).find( 'figure' ).css( 'background', 'none' );
-			$( this ).closest( 'li' ).find( 'figure img' ).show();
-			$( this ).closest( 'li' ).find( 'figure img' ).attr( 'src', templateUrl + '/img/aton-tb-quarto-' + URLize( $(this).val() ) + '-reservas.jpg' );
-		}
-		else
-		{
-			$( this ).closest( 'li' ).find( 'figure' ).css( 'background', '#ddd' );
-			$( this ).closest( 'li' ).find( 'figure img' ).hide();
-		}
-
-
-		var apSelected = $(this).find('option:selected').attr('value');
-
-
-		var eQuarto = $( this ).closest( '.quarto' );
-		eQuarto.find( 'input[type="checkbox"]' ).prop( 'checked', false );
-		eQuarto.find( 'input[type="checkbox"]' ).closest( 'label' ).find( 'span' ).removeAttr( 'checked' );
-
-		if( apSelected != '' )
-		{
-			eQuarto.find( '.opcao-2' ).show();
-			eQuarto.find( '#hospedes .hospede' ).not('.template').remove();
-
-			var apt = apartamentos[apSelected];
-			eQuarto.find( '.opcao-3' ).show();
-
-			var nQuarto = $( this ).closest('.quarto').find('#id-quarto').val();
-
-			for (var i = 0; i < apt.qtdAdultos; i++)
-			{
-				$( '#hospedes .hospede.template:not(".crianca"):not(".extra")').clone()
-					.insertBefore( eQuarto.find( '#hospedes #cf-hospede' ) );
-
-				var n = eQuarto.find( '#hospedes .hospede' ).not('.template').length + 1;
-
-				eQuarto.find( '#hospedes .hospede' ).last()
-					.removeClass('template')
-					.addClass('hospede-' + n + '-quarto-' + nQuarto)
-					.show();
-
-				$( this ).closest( '#quartos' ).find( '.hospede-' + n + '-quarto-' + nQuarto + ' #hospede-quarto' ).attr({
-					'name': 'nome-hospede-' + n + '-quarto-' + nQuarto,
-					'id': 'nome-hospede-' + n + '-quarto-' + nQuarto
-				});
-
-				$( this ).closest( '#quartos' ).find( '.hospede-' + n + '-quarto-' + nQuarto + ' label' ).attr({
-					'for': 'nome-hospede-' + n + '-quarto-' + nQuarto
-				});
-
-			}
-
-			eQuarto.find( '.hospede.crianca.template' ).clone()
-				.insertBefore( eQuarto.find( '#hospedes #cf-hospede') );
-
-			eQuarto.find( '.hospede.crianca.template' ).last()
-				.removeClass('template')
-				.addClass( 'hospede-crianca-quarto-' + nQuarto);
-
-			eQuarto.find( '.hospede-crianca-quarto-' + nQuarto + ' #crianca-quarto').attr({
-				'name': 'hospede-crianca-quarto-' + nQuarto,
-				'id': 'hospede-crianca-quarto-' + nQuarto
-			});
-
-			eQuarto.find( '#hospede-crianca-quarto-' + nQuarto ).closest( 'label' ).attr({
-				'for': 'hospede-crianca-quarto-' + nQuarto
-			});
-
-/*
-			eQuarto.find( '#nome-hospede-' + n + '-quarto-' + nQuarto).rules('add', 
-			{
-	           required: true,
-	           messages: {
-	               required:"Por favor, informe os nomes dos hospedes"
-	           }
-			})
-*/
-		}
-		else
-		{
-			eQuarto.find( '#hospedes .hospede.crianca' ).last().remove();			
-			eQuarto.find( '.opcao-2, .opcao-3' ).hide();
-
-			eQuarto.find( '#hospedes .hospede' ).not('template').remove();
-
-		}
-
-		contabilizaQuartos();
+	$('body').on('click', '#player .pause, .player-trigger.tocando', function (evt) {
+		evt.preventDefault();
+		aud.pause();
 	});
+	
+	$('#player #proxima').on('click', function(evt) {
+		evt.preventDefault();
+		aud.pause();
+		aud.pos++;
+		if (aud.pos == playlist.length) aud.pos = 0;
+		aud.setAttribute('src', playlist[aud.pos].url);
+        $('#player #musica #nome-faixa').text(playlist[aud.pos].title);
+        $('#player #musica #nome-album').text( 'Álbum: ' + playlist[aud.pos].album);
+        aud.load();
 
-	$('body').on( 'click', '#reservas form #quartos li #exclui-quarto', function() {
-		$( this ).closest( 'li' ).hide().addClass('disabled').find( 'input, select' ).attr('disabled', true);
-
-		contabilizaQuartos();
+        if( $('#player.tocando').length > 0 )
+        {
+	        playMusic(evt);
+	    }
 	});
+	
+	$('#player #anterior').bind('click', function(evt) {
+		evt.preventDefault();
+		aPaused = aud.paused;
+		aud.pos--;
+		if (aud.pos < 0) aud.pos = playlist.length - 1;
+		aud.setAttribute('src', playlist[aud.pos].url);
+        $('#player #musica #nome-faixa').text(playlist[aud.pos].title);
+        $('#player #musica #nome-album').text( 'Álbum: ' + playlist[aud.pos].album);
+		aud.load();
 
-	$( '#reservas form #btn-add-quarto' ).bind('click', function(){
+        if( $('#player.tocando').length > 0 )
+        {
+	        playMusic(evt);
+	    }
 
-		setTimeout( function() {
-			$( '#reservas form #quartos .quarto' ).last().find( 'select' ).focus();
-		}, 200);
-		/*
-		*/
+	});
+	
+	// JQuery doesn't seem to like binding to these HTML 5
+	// media events, but addEventListener does just fine
+	/*
+	aud.addEventListener('progress', function(evt) {
+		var width = parseInt($('#player').css('width'));
+		var percentLoaded = Math.round(evt.loaded / evt.total * 100);
+		var barWidth = Math.ceil(percentLoaded * (width / 100));
+		$('#player .load-progress').css( 'width', barWidth );
+		
+	});
+	aud.addEventListener('timeupdate', function(evt) {
+	    var width = parseInt($('#player').css('width'));
+		var percentPlayed = Math.round(aud.currentTime / aud.duration * 100);
+		var barWidth = Math.ceil(percentPlayed * (width / 100));
+		$('#player .play-progress').css( 'width', barWidth);
+	});
+	*/
+	aud.addEventListener('pause', function(evt) {
+		$('#player').addClass('pausado')
+			.removeClass('tocando');
 
-		$( 'li.quarto.template' ).clone().insertBefore( $( '#reservas form #quartos #cf-quartos' ) );
-		var n = $( '#reservas form #quartos .quarto' ).length - 1;
-		$( '#reservas form #total-quartos-reserva' ).val( n );
-		$( '#reservas form #quartos .quarto ' ).last().find('#id-quarto').val( n );
+			console.log('pausado (ganha .play)');
 
-		$( '#reservas form #quartos .quarto' ).last().removeClass('template').addClass('quarto-' + n).show();
-		$( '#reservas form #quartos .quarto-' + n + ' #quantidade-quarto-reserva' ).attr({
-			'name': 'quantidade-quarto-reserva-' + n,
-			'id': 'quantidade-quarto-reserva-' + n
-		});
+		$('#player #play').addClass('play');
+		$('#player #play').removeClass('pause');
 
-		$( '#reservas form #quartos .quarto-' + n + ' #tipo-quarto-reserva' ).attr({
-			'id': 'tipo-quarto-reserva-' + n,
-			'name': 'tipo-quarto-reserva-' + n
-		});
+		$('#player .album .musicas li button').addClass('play');
+		$('#player .album .musicas li button').removeClass('pause');
 
-		$( '#reservas form #quartos .quarto-' + n + ' .opcao-2 label' ).attr({
-			'for': 'cama-extra-reserva-' + n
-		});
+		//qualquer elemento com a classe "player-trigger" herdará a classe "tocando/pausado"
+		$('.player-trigger').removeClass('tocando');
+		$('.player-trigger').addClass('pausado');
+	});
+	
+	aud.addEventListener('play', function(evt) {
+		$('#player').addClass('tocando')
+			.removeClass('pausado');
 
-		$( '#reservas form #quartos .quarto-' + n + ' .opcao-2 label input' ).attr({
-			'id': 'cama-extra-reserva-' + n,
-			'name': 'cama-extra-reserva-' + n
-		});
+			console.log('tocando (ganha .pause)');
 
-		return false;	
-	})
+		$('#player #play').removeClass('play');
+		$('#player #play').addClass('pause');
 
+		$('#player .album .musicas li[data-pos="' + aud.pos + '"] button').removeClass('play');
+		$('#player .album .musicas li[data-pos="' + aud.pos + '"] button').addClass('pause');
 
+		//qualquer elemento com a classe "player-trigger" herdará a classe "tocando/pausado"
+		$('.player-trigger').addClass('tocando');
+		$('.player-trigger').removeClass('pausado');
+	});
+	
+	// aud.addEventListener('loadstart', function (evt) 
+	// {
+	// });
 
-	//--------------------------NOVIDADES------------------
-
-	var dataNovidade = $( '#novidades input[type="hidden"]' ).val();
-	dataNovidade = dataNovidade.replace(/\-/g, '/');
-	var dataCook = $.cookie( 'novaton' );
-
-	if( dataCook != undefined )
-	{
-		dataCook = dataCook.replace(/\-/g, '/');
-		if( dataCook < dataNovidade )
+	aud.addEventListener('canplay', function(evt) {
+		if(autoplay == 1)
 		{
-			$( '#novidades' ).show();
-			$( 'body' ).css( 'overflow', 'hidden' );
+			autoplay = undefined;
+			playMusic(evt);
+		}
+	});
+	
+	aud.addEventListener('ended', function(evt) {
+		$('#player #proxima').trigger('click');
+	});
+	
+
+	$( '#player #musica, #player #abre-player, #player #fechar' ).bind('click', function ()
+	{
+
+		if( $(this).closest('#player.fechado').length > 0)
+		{
+			$(this).closest('#player.fechado')
+				.removeClass('fechado')
+				.addClass('aberto');
 		}
 		else
 		{
-			$( '#novidades' ).remove();
+			$(this).closest('#player.aberto')
+				.removeClass('aberto')
+				.addClass('fechado');
 		}
-	}
-	else
-	{
-		$( '#novidades' ).show();
-		$( 'body' ).css( 'overflow', 'hidden' );
-	}
 
-	$( '#novidades #fechar, #novidades #conferir' ).bind( 'click', function()
+	})
+
+
+	$( 'body' ).on('click', '.album .musicas li button.play', function (evt)
 	{
-		if ( $( this ).closest( 'section' ).find( 'input[type="checkbox"]:checked' ).length > 0 )
+		evt.preventDefault();
+
+		if( $(this).closest('li').attr('data-pos') != aud.pos )
 		{
-			$.cookie( 'novaton', $( this ).closest( 'section' ).find( 'input[type="hidden"]' ).val() );
-			console.log($.cookie('novaton'))
+			aud.pos = $(this).closest('li').attr('data-pos');
+
+			aud.setAttribute('src', playlist[aud.pos].url);
+	        $('#player #musica #nome-faixa').text(playlist[aud.pos].title);
+	        $('#player #musica #nome-album').text( 'Álbum: ' + playlist[aud.pos].album);
+
+			aud.load();
+
 		}
-	} );
+		playMusic(evt);
+	})
 
-	$( '#novidades #fechar' ).bind( 'click', function()
+	$( 'body' ).on('click', '.album .musicas li button.pause', function (evt)
 	{
-		$( this ).closest( 'section' ).remove();
-		$( 'body' ).css( 'overflow', 'auto' );
-	} );
+		$('.album .musicas li.reproduzindo').removeClass('reproduzindo');
+		evt.preventDefault();
+		aud.pause();
+	})
 
-	//-----------------------------------------------------
+
+	setInterval(function() 
+	{
+
+		if( parseInt($('#player p#nome-faixa').css('margin-left')) < 0 )
+		{
+			$('#player p#nome-faixa').css('margin-left', '0')
+		}
+		else
+		{
+			$('#player p#nome-faixa').css('margin-left', '-100%')
+		}
+
+	}, 5000);
+
+
+	//-------------------PLAYER-------------------//
+
+
 
 
 
 });
 
-function hotelSobreTituloSameHeight ()
+
+		// url : templateUrl + "/musicas/dog-savanna-o-endereco-do-estado-do-mundo.mp3",
+var playlist = [
+	{
+		url : "http://dogsavanna.com.br/wp-content/themes/dogsavanna/musicas/dog-savanna-o-endereco-do-estado-do-mundo.mp3",
+		title : "O Endereço do Estado do Mundo",
+		album : "Inc."
+	},
+	{
+		url : "http://dogsavanna.com.br/wp-content/themes/dogsavanna/musicas/dog-savanna-palavras.mp3",
+		title : "Palavras",
+		album : "Inc."
+	},
+	{
+		url : "http://dogsavanna.com.br/wp-content/themes/dogsavanna/musicas/dog-savanna-verdades.mp3",
+		title : "Verdades",
+		album : "Inc."
+	},
+	{
+		url : "http://dogsavanna.com.br/wp-content/themes/dogsavanna/musicas/dog-savanna-tribus.mp3",
+		title : "Tribus",
+		album : "Inc."
+	},
+	{
+		url : "http://dogsavanna.com.br/wp-content/themes/dogsavanna/musicas/dog-savanna-nosso-time.mp3",
+		title : "Nosso Time",
+		album : "Inc."
+	},
+	{
+		url : "http://dogsavanna.com.br/wp-content/themes/dogsavanna/musicas/dog-savanna-saga.mp3",
+		title : "SAGA",
+		album : "SAGA"
+	},
+	{
+		url : "http://dogsavanna.com.br/wp-content/themes/dogsavanna/musicas/dog-savanna-dentro-e-fora.mp3",
+		title : "Dentro e Fora",
+		album : "SAGA"
+	},
+	{
+		url : "http://dogsavanna.com.br/wp-content/themes/dogsavanna/musicas/dog-savanna-na-minha.mp3",
+		title : "Na Minha",
+		album : "SAGA"
+	},
+	{
+		url : "http://dogsavanna.com.br/wp-content/themes/dogsavanna/musicas/dog-savanna-marfim.mp3",
+		title : "Marfim",
+		album : "SAGA"
+	}
+];
+
+var aud = $('#player .aud').get(0);
+aud.pos = 2;
+var autoplay = aud.getAttribute('data-autoplay');
+var aPaused = true;
+
+
+
+function playMusic (evt)
 {
-	if ($("body").innerWidth() > 767)
-	{
-		$('#hotel #titulo').height( $('#hotel .wrap-vantagens').height() );
-	}
-	else
-	{
-		$('#hotel #titulo').removeAttr('style');
-	}
+	evt.preventDefault();
+	$('.album .musicas li.reproduzindo').removeClass('reproduzindo');
+	$('.album .musicas li[data-pos="' + aud.pos + '"]').addClass('reproduzindo');
+
+		if (aud.pos < 0) {
+			$('#player #proxima').trigger('click');
+		} else {
+			aud.play();
+		}
 }
 
-function urlToOpenForm ()
-{
-	if( window.location.pathname.indexOf('reservas') >= 0 )
-	{
-		$( '#contato' ).hide();
-		$( '#reservas' ).show();
-		$( '#body' ).css('overflow', 'hidden' );
-	}
-	else if( window.location.pathname.indexOf('contato') >= 0 )
-	{
-		$( '#reservas' ).hide();
-		$( '#contato' ).show();
-		$( '#body' ).css('overflow', 'hidden' );
-	}
-	else
-	{
-		$('section#reservas, section#contato').hide();
-		$('body').css('overflow', 'auto');
-	}
-}
 
-var beforeForm = '';
-
-function getBeforeForm ()
-{
-	beforeForm = window.location.pathname.split('/');
-	beforeForm = beforeForm[ beforeForm.length - 2 ];
-}
 
 function contatoOk (data)
 {
@@ -639,29 +394,6 @@ function contatoOk (data)
 
 }
 
-function reservaOk (data)
-{
-	console.log($(this));
-	console.log(data);
-
-	$('#reservas #process').hide();
-	$('#reservas form fieldset').show();
-	$('#reservas form .form-text').show();
-	$('#reservas form input[type=submit]').show();
-
-
-	if( data == 'sucesso')
-	{
-		$('#reservas form #success').show();
-		$('#reservas form')[0].reset();
-		resetQuartosReserva();
-	}
-	else
-	{
-		$('#reservas form #error').show();
-	}
-
-}
 
 function URLize (s) 
 {
@@ -680,31 +412,6 @@ function URLize (s)
     r = r.replace(new RegExp(/\W/g),"");
     return r;
 };
-
-function contabilizaQuartos () 
-{
-/*
-	var p = parseFloat('0');
-	$( '#reservas form #quartos li' ).each( function()
-	{
-		if( !$( this ).hasClass('template') && !$( this ).hasClass('disabled')  )
-		{
-			p = p + ( parseFloat( vQ[$( this ).find( 'select' ).val() ] ) * parseInt( $( this ).find( '#num input' ).val() ) );
-
-			if( $( this ).find( 'input[type=checkbox]:checked' ).length > 0 )
-			{
-				p = p + parseFloat( vQ[$( this ).find( 'input[type=checkbox]:checked' ).val()] ) * parseInt( $( this ).find( '#num input' ).val() );
-			}
-
-		}
-	})
-
-	$( '#reservas form .preco-quartos p' ).html( 'Total: R$ <span>' + p.toFixed(2) + '</span>' );
-	$( '#reservas form .preco-quartos p span' ).mask('000.000.000.000.000,00', {reverse: true});
-
-	p = undefined;
-*/
-}
 
 function pluralize (s, p, n)
 {
@@ -741,6 +448,18 @@ function initializeMap()
 
 }
 
+function changeMenu ()
+{
+	if( $(window).scrollTop() > 0 )
+	{
+		$( 'header nav' ).addClass('floating');
+	}
+	else
+	{
+		$( 'header nav' ).removeClass('floating');
+	}
+}
+
 function showInAnimation () 
 {
 
@@ -753,7 +472,3 @@ function showInAnimation ()
 	})
 }
 
-function resetQuartosReserva () 
-{
-	$( '#reservas #quartos .quarto:not(".template")' ).remove();
-}

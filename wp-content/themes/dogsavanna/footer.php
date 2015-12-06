@@ -1,20 +1,47 @@
 
 
         <footer>
+            <div class="container-fluid">
 
+                <div class="row">
+                    <div class="col-xs-offset-1 col-xs-10">
+                        <div id="caixa-contato">
+                            <p>61 9206 6465</p>
+                            <p>contato@dogsavanna.com.br</p>
+
+                            <div id="separador"></div>
+
+                            <ul>
+                                <li><a id="facebook" title="facebook" href="http://facebook.com/dogsavanna" target="_blank">Facebook</a></li>
+
+                                <li><a id="youtube" title="Youtube" href="http://youtube.com/dogsavanna" target="_blank">Youtube</a></li>
+
+                                <li><a id="soundcloud" title="Soundcloud" href="http://soundcloud.com/dogsavanna" target="_blank">Soundcloud</a></li>
+                            </ul>
+
+                        </div>
+                    </div> 
+
+                    <div class="col-sm-1">
+                        <a id="humano" title="By Humano" href="http://humanostud.io" target="_blank">By Humano</a>
+                    </div>  
+                </div>
+
+            </div>
         </footer>
 
         <script src="//ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js"></script>
         <script>window.jQuery || document.write('<script src= "<?php bloginfo("template_url") ?>/js/vendor/jquery-1.11.2.min.js"><\/script>')</script>
 
         <script src= "<?php bloginfo('template_url') ?>/js/bootstrap.min.js"></script>
+<!-- 
         <script src= "<?php bloginfo('template_url') ?>/js/vendor/modernizr-2.8.3.min.js"></script>
-
+ -->
         <script src= "<?php bloginfo('template_url') ?>/js/main.js"></script>
-        <script src="<?php bloginfo('template_url') ?>/js/jquery.mask.min.js"></script>
+        <script src="<?php bloginfo('template_url') ?>/js/jquery.mask.js"></script>
         <script src="<?php bloginfo('template_url') ?>/js/jquery.form.js"></script>
         <script src="<?php bloginfo('template_url') ?>/js/jquery.validate.min.js"></script>
-        <!-- <script src="<?php bloginfo('template_url') ?>/js/jquery.cookie.js"></script> -->
+        <script src="<?php bloginfo('template_url') ?>/js/jquery.cookie.js"></script>
 
         <!-- Google Analytics: change UA-XXXXX-X to be your site's ID. -->
         <!-- 
